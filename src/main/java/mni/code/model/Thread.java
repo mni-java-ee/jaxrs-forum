@@ -1,26 +1,16 @@
 package mni.code.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "thread")
 public class Thread implements Serializable {
 
-    @XmlAttribute(name = "id")
     private BigInteger id;
 
-    @XmlAttribute(name = "threadName")
     private String threadName;
 
-    @XmlAttribute(name = "threadDate")
     private String threadDate;
 
-    @XmlAttribute(name = "threadContent")
     private String threadContent;
 
     public BigInteger getId() {

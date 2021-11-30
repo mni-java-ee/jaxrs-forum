@@ -1,0 +1,6 @@
+mni\code\controller\HelloController.class
+mni\code\JaxRsActivator.class
+mni\code\service\IThread.class
+mni\code\controller\ThreadController.class
+mni\code\model\Thread.class
+mni\code\service\ThreadService.class
