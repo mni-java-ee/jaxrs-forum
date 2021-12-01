@@ -1,15 +1,17 @@
 package mni.code.controller;
 
-import jakarta.inject.Inject;
 import mni.code.model.Thread;
 import mni.code.service.ThreadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.math.BigInteger;
 import java.util.LinkedList;
+import java.util.List;
 
 @Path("/thread-mgmt")
 public class ThreadController {
@@ -43,9 +45,28 @@ public class ThreadController {
 
     @POST
     @Path("/createNewThread")
-    @Consumes("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createNewThread(Thread newThread){
         Thread thread = threadService.createNewThread(newThread);
         return Response.status(200).entity(thread).build();
+    }
+
+    @PUT
+    @Path("/updateThread/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateThread(@PathParam("id") BigInteger id, Thread newThread){
+        Thread currentThread = threadService.fetchThreadById(id);
+        if (currentThread == null) {
+            return Response.status(404).entity(currentThread).build();
+        }
+
+        currentThread.setThreadContent(newThread.getThreadContent());
+        currentThread.setThreadName(newThread.getThreadName());
+        currentThread.setThreadDate(newThread.getThreadDate());
+
+        List<Thread> threads = threadService.updateCurrentThread(id, currentThread);
+        return Response.status(200).entity(threads).build();
     }
 }

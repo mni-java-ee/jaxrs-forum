@@ -1,20 +1,21 @@
 package mni.code.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+
 import mni.code.model.Thread;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.Optional;
 
 @ApplicationScoped
-public class ThreadService implements IThread{
+public class ThreadService implements IThread {
 
     private final LinkedList<Thread> threads = new LinkedList<>();
 
     @PostConstruct
-    public void init(){
+    public void init() {
         Thread thread1 = new Thread();
         thread1.setId(new BigInteger("1"));
         thread1.setThreadName("Thread#1");
@@ -30,8 +31,9 @@ public class ThreadService implements IThread{
     }
 
     @Override
-    public Thread updateCurrentThread(Thread currThread) {
-        return null;
+    public LinkedList<Thread> updateCurrentThread(BigInteger id, Thread currThread) {
+        threads.set(currThread.getId().intValueExact(), currThread);
+        return threads;
     }
 
     @Override
@@ -41,7 +43,14 @@ public class ThreadService implements IThread{
 
     @Override
     public Thread fetchThreadById(BigInteger id) {
-        Optional<Thread> optCurrentThread = threads.stream().filter(t -> t.getId().compareTo(id)==0).findAny();
+        Optional<Thread> optCurrentThread = threads.stream().filter(t -> t.getId().compareTo(id) == 0).findAny();
         return optCurrentThread.orElse(null);
+    }
+
+    @Override
+    public LinkedList<Thread> deleteThreadById(BigInteger id) {
+        Thread currentThread = fetchThreadById(id);
+        threads.remove(currentThread);
+        return threads;
     }
 }
