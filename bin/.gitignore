@@ -1,0 +1,5 @@
+ .idea/
+ target/
+ .class
+ .idea/jpa-buddy.xml
+/target/

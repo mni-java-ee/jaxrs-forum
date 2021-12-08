@@ -5,7 +5,12 @@ import java.math.BigInteger;
 
 public class Thread implements Serializable {
 
-    private BigInteger id;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private BigInteger id;
 
     private String threadName;
 

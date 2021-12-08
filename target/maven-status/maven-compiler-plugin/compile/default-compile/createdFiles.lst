@@ -1,6 +1,8 @@
+mni\code\connection\DbHelper.class
+mni\code\model\Thread.class
+mni\code\service\ThreadService.class
 mni\code\controller\HelloController.class
 mni\code\JaxRsActivator.class
 mni\code\service\IThread.class
+mni\code\dao\ThreadDAO.class
 mni\code\controller\ThreadController.class
-mni\code\model\Thread.class
-mni\code\service\ThreadService.class

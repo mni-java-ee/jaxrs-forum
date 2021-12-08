@@ -1,5 +1,6 @@
 package mni.code.controller;
 
+import mni.code.connection.DbHelper;
 import mni.code.model.Thread;
 import mni.code.service.ThreadService;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class ThreadController {
 
     @Inject
     private ThreadService threadService;
+    
+    @Inject
+	private DbHelper dbHelper;
 
     @GET
     @Path("/getThreadById/{id}")
@@ -47,8 +52,9 @@ public class ThreadController {
     @Path("/createNewThread")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createNewThread(Thread newThread){
+    public Response createNewThread(Thread newThread) throws SQLException {
         Thread thread = threadService.createNewThread(newThread);
+        String responses = dbHelper.insertData(newThread);
         return Response.status(200).entity(thread).build();
     }
 
