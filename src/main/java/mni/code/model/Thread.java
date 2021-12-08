@@ -17,6 +17,15 @@ public class Thread implements Serializable {
     private String threadDate;
 
     private String threadContent;
+    
+    public Thread(BigInteger id, String threadName, String threadDate, String threadContent) {
+    	this.id = id;
+    	this.threadName = threadName;
+    	this.threadDate = threadDate;
+    	this.threadContent = threadContent;
+    }
+    
+    public Thread() {}
 
     public BigInteger getId() {
         return id;
