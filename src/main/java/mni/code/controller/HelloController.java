@@ -79,4 +79,13 @@ public class HelloController {
         String result = dbHelper.updateDatabyId(idTarget, dataThread);
         return Response.status(200).entity(result).build();
     }
+
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/deleteData/{id}")
+    public Response deleteData(@PathParam("id") final String id) throws SQLException {
+        Integer idTarget = Integer.parseInt(id);
+        String result = dbHelper.deleteById(idTarget);
+        return Response.status(200).entity(result).build();
+    }
 }

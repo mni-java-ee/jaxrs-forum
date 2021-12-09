@@ -126,4 +126,14 @@ public class DbHelper {
 			return "Gagal";
 		}
 	}
+
+	public String deleteById(Integer idTarget) throws SQLException{
+		Statement stmt = koneksi.createStatement();
+		Boolean result = stmt.execute("DELETE FROM THREADS WHERE ID = "+ idTarget);
+		if(!result){
+			return "Berhasil";
+		}else{
+			return "Gagal";
+		}
+	}
 }
