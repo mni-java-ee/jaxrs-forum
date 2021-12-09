@@ -4,12 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.print.attribute.standard.Media;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -57,7 +53,30 @@ public class HelloController {
     @Path("/getAllData")
     public Response getAllData() throws SQLException {
     	dbHelper.getAllData();
-    	List<Thread> threads = dbHelper.getThreadList();
+    	List<Thread> threads = dbHelper.getAllData();
     	return Response.status(200).entity(threads).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getSingleData/{id}")
+    public Response getSingleData(@PathParam("id") final String id) throws  SQLException {
+        Integer idTarget = Integer.parseInt(id);
+        List<Thread> threads = dbHelper.getSingleData(idTarget);
+        if(threads.isEmpty()){
+            return Response.status(400).entity(threads).build();
+        }else{
+            return Response.status(200).entity(threads).build();
+        }
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/updateData/{id}")
+    public Response updateData(@PathParam("id") final String id, Thread dataThread) throws SQLException {
+        Integer idTarget = Integer.parseInt(id);
+        String result = dbHelper.updateDatabyId(idTarget, dataThread);
+        return Response.status(200).entity(result).build();
     }
 }

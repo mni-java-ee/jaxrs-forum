@@ -51,17 +51,16 @@ public class DbHelper {
     public String insertData(Thread newThread) throws SQLException {
     	String result = "Gagal";
   	
-    	String query = "INSERT INTO Threads (ID, THREADNAME, THREADDATE, THREADCONTENT)"
-    			+ " VALUES ( ?, ?, ?, ?)";
+    	String query = "INSERT INTO Threads (THREADNAME, THREADDATE, THREADCONTENT)"
+    			+ " VALUES ( ?, ?, ?)";
     	
     	PreparedStatement preparedStmt = koneksi.prepareStatement(query);
-    	preparedStmt.setInt(1, newThread.getId().intValue());
-    	preparedStmt.setString(2, newThread.getThreadName());
-    	preparedStmt.setString(3, newThread.getThreadDate());
-    	preparedStmt.setString(4, newThread.getThreadContent());
+    	preparedStmt.setString(1, newThread.getThreadName());
+    	preparedStmt.setString(2, newThread.getThreadDate());
+    	preparedStmt.setString(3, newThread.getThreadContent());
     	Boolean status = preparedStmt.execute();
-    	if (status) {
-    		result = "Berhasil "+status;
+    	if (!status) {
+    		result = "Berhasil ";
     	}
     	return result;
     }
@@ -69,6 +68,10 @@ public class DbHelper {
     public List<Thread> getAllData() throws SQLException {
     	Statement stmt = koneksi.createStatement();
     	ResultSet rs;
+
+		if(!threadList.isEmpty()){
+			threadList.clear();
+		}
     	
     	rs = stmt.executeQuery("SELECT ID, THREADNAME, THREADDATE, THREADCONTENT FROM THREADS");
  
@@ -77,21 +80,50 @@ public class DbHelper {
     		String threadName = rs.getString("THREADNAME");
     		String threadDate = rs.getString("THREADDATE");
     		String threadContent = rs.getString("THREADCONTENT");
-    		System.out.println("threadID" + id);
-    		System.out.println("threadName :" + threadName);
-    		System.out.println("threadDate :" + threadDate);
-    		System.out.println("threadContent :" + threadContent);
     		threadList.add(new Thread(id, threadName, threadDate, threadContent));
 		}	
     	return threadList; 
     }
     
-    public Thread getSingleData(Integer id) throws SQLException {
+    public List<Thread> getSingleData(Integer idTarget) throws SQLException {
     	Statement stmt = koneksi.createStatement();
-    	return null;
+		ResultSet rs;
+
+		if(!threadList.isEmpty()){
+			threadList.clear();
+		}
+
+		rs = stmt.executeQuery("SELECT ID, THREADNAME, THREADDATE, THREADCONTENT FROM THREADS WHERE id = "+ idTarget);
+
+		while (rs.next()) {
+			BigInteger id = BigInteger.valueOf(rs.getInt("ID"));
+			String threadName = rs.getString("THREADNAME");
+			String threadDate = rs.getString("THREADDATE");
+			String threadContent = rs.getString("THREADCONTENT");
+			threadList.add(new Thread(id, threadName, threadDate,threadContent));
+		}
+    	return threadList;
     }
-    
-    public List<Thread> getThreadList(){
-		return threadList;
-    }
+
+	public String updateDatabyId(Integer idTarget, Thread updatedData) throws SQLException {
+		Statement stmt = koneksi.createStatement();
+
+		String threadName = updatedData.getThreadName();
+		String threadDate = updatedData.getThreadDate();
+		String threadContent = updatedData.getThreadContent();
+
+		String sqlQuery = "UPDATE THREADS SET " +
+				"THREADNAME = '"+ threadName +
+				"', THREADDATE = '"+ threadDate +
+				"', THREADCONTENT ='"+ threadContent +
+				"' WHERE ID = "+ idTarget;
+
+		Boolean result = stmt.execute(sqlQuery);
+
+		if(!result){
+			return "Berhasil";
+		}else{
+			return "Gagal";
+		}
+	}
 }
