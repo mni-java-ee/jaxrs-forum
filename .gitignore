@@ -1,5 +1,12 @@
+<<<<<<< HEAD
  .idea/
  target/
  .class
  .idea/jpa-buddy.xml
 /target/
+=======
+.idea/
+target/
+.class
+.idea/jpa-buddy.xml
+>>>>>>> 551dd64 (modify target/** to be target/)
