@@ -1,6 +1,10 @@
+mni\code\connection\DbHelper.class
+mni\code\service\IComment.class
+mni\code\model\Thread.class
+mni\code\service\ThreadService.class
 mni\code\controller\HelloController.class
 mni\code\JaxRsActivator.class
 mni\code\service\IThread.class
+mni\code\service\CommentService.class
 mni\code\controller\ThreadController.class
-mni\code\model\Thread.class
-mni\code\service\ThreadService.class
+mni\code\model\Comment.class

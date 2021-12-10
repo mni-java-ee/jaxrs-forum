@@ -1,6 +1,10 @@
-Z:\quarkus-workspace\jaxrs-forum\src\main\java\mni\code\controller\ThreadController.java
-Z:\quarkus-workspace\jaxrs-forum\src\main\java\mni\code\controller\HelloController.java
-Z:\quarkus-workspace\jaxrs-forum\src\main\java\mni\code\JaxRsActivator.java
-Z:\quarkus-workspace\jaxrs-forum\src\main\java\mni\code\service\IThread.java
-Z:\quarkus-workspace\jaxrs-forum\src\main\java\mni\code\service\ThreadService.java
-Z:\quarkus-workspace\jaxrs-forum\src\main\java\mni\code\model\Thread.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\controller\HelloController.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\service\IComment.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\connection\DbHelper.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\controller\ThreadController.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\service\CommentService.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\service\IThread.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\JaxRsActivator.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\service\ThreadService.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\model\Thread.java
+D:\LEARN JAVA\jaxrs-forum\src\main\java\mni\code\model\Comment.java
