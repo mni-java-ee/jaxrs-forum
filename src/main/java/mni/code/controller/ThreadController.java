@@ -21,14 +21,11 @@ public class ThreadController {
 
     @Inject
     private ThreadService threadService;
-    
-    @Inject
-	private DbHelper dbHelper;
 
     @GET
     @Path("/getThreadById/{id}")
     @Produces("application/json")
-    public Response getThreadById(@PathParam("id")BigInteger id){
+    public Response getThreadById(@PathParam("id")BigInteger id) throws SQLException {
        Thread currentThread = threadService.fetchThreadById(id);
        LOG.info("fetch thread by id", id);
         if (currentThread == null) {
@@ -40,8 +37,8 @@ public class ThreadController {
     @GET
     @Path("/getThreads")
     @Produces("application/json")
-    public Response getThreads(){
-        LinkedList<Thread> threads = threadService.fetchAllThread();
+    public Response getThreads() throws SQLException {
+        List<Thread> threads = threadService.fetchAllThread();
         if (threads.isEmpty()) {
             return Response.status(404).build();
         }
@@ -54,7 +51,6 @@ public class ThreadController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createNewThread(Thread newThread) throws SQLException {
         Thread thread = threadService.createNewThread(newThread);
-        String responses = dbHelper.insertData(newThread);
         return Response.status(200).entity(thread).build();
     }
 
@@ -62,17 +58,16 @@ public class ThreadController {
     @Path("/updateThread/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateThread(@PathParam("id") BigInteger id, Thread newThread){
-        Thread currentThread = threadService.fetchThreadById(id);
-        if (currentThread == null) {
-            return Response.status(404).entity(currentThread).build();
-        }
+    public Response updateThread(@PathParam("id") BigInteger id, Thread newThread) throws SQLException {
+        String updatedThread = threadService.updateCurrentThread(id, newThread);
+        return Response.status(200).entity(updatedThread).build();
+    }
 
-        currentThread.setThreadContent(newThread.getThreadContent());
-        currentThread.setThreadName(newThread.getThreadName());
-        currentThread.setThreadDate(newThread.getThreadDate());
-
-        List<Thread> threads = threadService.updateCurrentThread(id, currentThread);
-        return Response.status(200).entity(threads).build();
+    @DELETE
+    @Path("/deleteThread/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteThread(@PathParam("id") BigInteger id) throws SQLException {
+        String result = threadService.deleteThreadById(id);
+        return Response.status(200).entity(result).build();
     }
 }

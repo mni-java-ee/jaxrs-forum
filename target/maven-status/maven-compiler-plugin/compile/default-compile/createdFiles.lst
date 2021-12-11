@@ -4,5 +4,4 @@ mni\code\service\ThreadService.class
 mni\code\controller\HelloController.class
 mni\code\JaxRsActivator.class
 mni\code\service\IThread.class
-mni\code\dao\ThreadDAO.class
 mni\code\controller\ThreadController.class
