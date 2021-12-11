@@ -18,7 +18,7 @@ import java.util.Optional;
 public class ThreadService implements IThread {
 
     private final List<Thread> threads = new LinkedList<>();
-    private Thread thread;
+    private Thread thread = new Thread();
     private DbHelper dbHelper = new DbHelper();
 
     @PostConstruct
@@ -36,12 +36,12 @@ public class ThreadService implements IThread {
 
     @Override
     public String updateCurrentThread(BigInteger id, Thread currThread) throws SQLException {
-        String query = "UPDATE TABLE TBL_THREAD " +
-                "Set '" +
+        String query = "UPDATE TBL_THREAD " +
+                "Set THREADNAME = '" +
                 currThread.getThreadName() +
-                "','" +
+                "', THREADDATE = '" +
                 currThread.getThreadDate() +
-                "','" +
+                "', THREADCONTENT = '" +
                 currThread.getThreadContent() +
                 "' WHERE ID = "+
                 id;
@@ -68,15 +68,23 @@ public class ThreadService implements IThread {
 
     @Override
     public Thread fetchThreadById(BigInteger id) throws SQLException {
+        thread.setId(null);
+        thread.setThreadName(null);
+        thread.setThreadDate(null);
+        thread.setThreadContent(null);
         String sql = "SELECT ID, THREADNAME, THREADDATE, THREADCONTENT FROM TBL_THREAD WHERE ID = " + id;
         ResultSet rs = dbHelper.getSingleData(sql);
-        if (rs.next()) {
-            thread.setId( BigInteger.valueOf(rs.getInt("ID")));
-            thread.setThreadName(rs.getString("THREADNAME"));
-            thread.setThreadDate(rs.getString("THREADDATE"));
-            thread.setThreadContent(rs.getString("THREADCONTENT"));
+        if(rs != null){
+            while (rs.next()) {
+                thread.setId( BigInteger.valueOf(rs.getInt("ID")));
+                thread.setThreadName(rs.getString("THREADNAME"));
+                thread.setThreadDate(rs.getString("THREADDATE"));
+                thread.setThreadContent(rs.getString("THREADCONTENT"));
+            }
+            return thread;
+        }else{
+            return null;
         }
-        return thread;
     }
 
     @Override

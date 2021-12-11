@@ -28,8 +28,9 @@ public class ThreadController {
     public Response getThreadById(@PathParam("id")BigInteger id) throws SQLException {
        Thread currentThread = threadService.fetchThreadById(id);
        LOG.info("fetch thread by id", id);
-        if (currentThread == null) {
-            return Response.status(404).build();
+        if (currentThread.getId() == null) {
+            String msg = "record yang dipilih tidak ada";
+            return Response.status(404).entity(msg).build();
         }
         return Response.status(200).entity(currentThread).build();
     }

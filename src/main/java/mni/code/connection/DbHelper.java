@@ -24,13 +24,14 @@ public class DbHelper {
     private static Connection koneksi;
 	private static Statement stmt;
 	private static ResultSet rs;
-    
-    @PostConstruct
-	private void init(){
+
+	public DbHelper(){
     	try {
-            String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-            DriverManager.registerDriver(new OracleDriver());
-            this.koneksi = DriverManager.getConnection(url, "tikto", "tikto1234");
+			if(koneksi == null){
+				String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+				DriverManager.registerDriver(new OracleDriver());
+				koneksi = DriverManager.getConnection(url, "tikto", "tikto1234");
+			}
     	} catch(Exception e) {
     		//System.out.println(e.getStackTrace()[0]);
     		e.printStackTrace();
@@ -55,7 +56,6 @@ public class DbHelper {
     }
     
     public String insertData(String sql) throws SQLException {
-		init();
     	String result = "Gagal";
     	PreparedStatement preparedStmt = koneksi.prepareStatement(sql);
     	Boolean status = preparedStmt.execute();
@@ -66,15 +66,16 @@ public class DbHelper {
     }
     
     public ResultSet getAllData(String sql) throws SQLException {
-		init();
 		stmt = koneksi.createStatement();
-//    	ResultSet rs;
+    	ResultSet rs;
     	rs = stmt.executeQuery(sql);
     	return rs;
     }
     
     public ResultSet getSingleData(String sql) throws SQLException {
-		init();
+//		if(koneksi == null){
+//			init();
+//		}
     	Statement stmt = koneksi.createStatement();
 		ResultSet rs;
 		rs = stmt.executeQuery(sql);
@@ -82,7 +83,6 @@ public class DbHelper {
     }
 
 	public String updateDatabyId(String sql) throws SQLException {
-		init();
 		Statement stmt = koneksi.createStatement();
 		Boolean result = stmt.execute(sql);
 		if(!result){
@@ -93,7 +93,6 @@ public class DbHelper {
 	}
 
 	public String deleteById(String sql) throws SQLException{
-		init();
 		Statement stmt = koneksi.createStatement();
 		Boolean result = stmt.execute(sql);
 		if(!result){
