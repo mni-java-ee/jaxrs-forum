@@ -2,17 +2,14 @@ package mni.code.connection;
 
 import oracle.jdbc.OracleDriver;
 
-import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.Executor;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import mni.code.model.Thread;
 
@@ -21,11 +18,10 @@ public class DbHelper {
 	
 	private List<Thread> threadList = new ArrayList<Thread>();
 
-    private static Connection koneksi;
-	private static Statement stmt;
-	private static ResultSet rs;
+	private static Connection koneksi;
 
-	public DbHelper(){
+	@PostConstruct
+	private void init(){
     	try {
 			if(koneksi == null){
 				String url = "jdbc:oracle:thin:@localhost:1521:orcl";
@@ -66,16 +62,13 @@ public class DbHelper {
     }
     
     public ResultSet getAllData(String sql) throws SQLException {
-		stmt = koneksi.createStatement();
+		Statement stmt = koneksi.createStatement();
     	ResultSet rs;
     	rs = stmt.executeQuery(sql);
     	return rs;
     }
     
     public ResultSet getSingleData(String sql) throws SQLException {
-//		if(koneksi == null){
-//			init();
-//		}
     	Statement stmt = koneksi.createStatement();
 		ResultSet rs;
 		rs = stmt.executeQuery(sql);

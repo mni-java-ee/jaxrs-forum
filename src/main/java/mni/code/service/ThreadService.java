@@ -6,6 +6,7 @@ import mni.code.model.Thread;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -18,12 +19,14 @@ import java.util.Optional;
 public class ThreadService implements IThread {
 
     private final List<Thread> threads = new LinkedList<>();
-    private Thread thread = new Thread();
-    private DbHelper dbHelper = new DbHelper();
+
+    @Inject private Thread thread;
+    @Inject private DbHelper dbHelper;
 
     @PostConstruct
     public void init() {
-
+        thread = new Thread();
+//        dbHelper = new DbHelper();
     }
 
     @Override
