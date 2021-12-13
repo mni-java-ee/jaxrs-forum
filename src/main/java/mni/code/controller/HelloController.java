@@ -1,16 +1,10 @@
 package mni.code.controller;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import javax.inject.Inject;
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import mni.code.connection.DbHelper;
-import mni.code.model.Thread;
+
 
 @Path("/hello")
 public class HelloController {

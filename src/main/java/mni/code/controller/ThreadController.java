@@ -1,6 +1,5 @@
 package mni.code.controller;
 
-import mni.code.connection.DbHelper;
 import mni.code.model.Thread;
 import mni.code.service.ThreadService;
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.math.BigInteger;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 @Path("/thread-mgmt")

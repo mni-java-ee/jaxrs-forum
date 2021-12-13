@@ -1,9 +1,7 @@
 package mni.code.connection;
 
 import oracle.jdbc.OracleDriver;
-
 import java.sql.*;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 

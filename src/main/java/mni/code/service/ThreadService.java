@@ -1,6 +1,5 @@
 package mni.code.service;
 
-
 import mni.code.connection.DbHelper;
 import mni.code.model.Thread;
 
