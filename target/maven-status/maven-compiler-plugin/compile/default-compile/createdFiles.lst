@@ -1,4 +1,5 @@
 mni\code\connection\DbHelper.class
+mni\code\controller\CommentController.class
 mni\code\service\IComment.class
 mni\code\model\Thread.class
 mni\code\service\ThreadService.class

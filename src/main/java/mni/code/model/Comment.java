@@ -3,19 +3,18 @@ package mni.code.model;
 import java.math.BigInteger;
 
 public class Comment {
-    private BigInteger id;
+    private BigInteger commentId;
+    private BigInteger threadId;
     private String comments;
     private String commentDate;
 
-    private Thread thread = new Thread();
 
-
-    public BigInteger getId() {
-        return id;
+    public BigInteger getCommentId() {
+        return commentId;
     }
 
-    public void setId(BigInteger id) {
-        this.id = id;
+    public void setCommentId(BigInteger commentId) {
+        this.commentId = commentId;
     }
 
     public String getComments() {
@@ -34,11 +33,12 @@ public class Comment {
         this.commentDate = commentDate;
     }
 
-    public Thread getThread() {
-        return thread;
+
+    public BigInteger getThreadId() {
+        return threadId;
     }
 
-    public void setThread(Thread thread) {
-        this.thread = thread;
+    public void setThreadId(BigInteger threadId) {
+        this.threadId = threadId;
     }
 }

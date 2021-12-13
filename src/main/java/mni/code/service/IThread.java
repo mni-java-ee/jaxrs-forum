@@ -4,11 +4,12 @@ import mni.code.model.Thread;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
+import java.util.List;
 
 public interface IThread {
-    Thread createNewThread(Thread newThread);
-    LinkedList<Thread> updateCurrentThread(BigInteger id, Thread currThread);
-    LinkedList<Thread> fetchAllThread();
+    int createNewThread(Thread newThread);
+    boolean updateCurrentThread(BigInteger id, Thread currThread);
+    List<Thread> fetchAllThread();
     Thread fetchThreadById(BigInteger id);
-    LinkedList<Thread> deleteThreadById(BigInteger id);
+    boolean deleteThreadById(BigInteger id);
 }

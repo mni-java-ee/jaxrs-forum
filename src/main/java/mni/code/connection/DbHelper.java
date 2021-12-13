@@ -2,6 +2,7 @@ package mni.code.connection;
 
 import oracle.jdbc.OracleDriver;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import java.sql.*;
 
@@ -9,6 +10,7 @@ import java.sql.*;
 public class DbHelper {
     private static Connection connection;
 
+    @PostConstruct
     public  void connect(){
         if (connection == null){
             try {
@@ -22,35 +24,37 @@ public class DbHelper {
     }
 
     public  int insertQueryGetID(String query){
-        connect();
         int num = 0;
-        int rslt = -1;
+
         try {
             Statement statement = connection.createStatement();
-            num = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = statement.getGeneratedKeys();
-            if (rs.next()){
-                rslt = rs.getInt(1);
-            }
-            rs.close();
+            num = statement.executeUpdate(query);
             statement.close();
-        }catch (Exception e){
+        }catch (SQLException e){
             e.printStackTrace();
-            rslt = -1;
+            num = -1;
         }
-        return rslt;
+        return num;
+    }
+
+    public ResultSet SelectQuery(String query){
+        ResultSet rs = null;
+        try {
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return rs;
     }
 
     public boolean execQuery(String query){
-        connect();
+
         boolean result = false;
 
         try {
             Statement statement = connection.createStatement();
-            statement.executeUpdate(query);
-
-            result = true;
-
+            result = statement.execute(query);
             statement.close();
         }catch (Exception e){
             e.printStackTrace();
