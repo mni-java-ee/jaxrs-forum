@@ -94,4 +94,11 @@ public class DbHelper {
 			return "Gagal";
 		}
 	}
+
+	public ResultSet executeSQL(String sql) throws SQLException{
+		Statement stmt = koneksi.createStatement();
+		ResultSet rs;
+		rs = stmt.executeQuery(sql);
+		return rs;
+	}
 }
