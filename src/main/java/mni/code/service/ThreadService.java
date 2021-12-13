@@ -8,12 +8,10 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigInteger;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped
 public class ThreadService implements IThread {
@@ -30,11 +28,15 @@ public class ThreadService implements IThread {
     }
 
     @Override
-    public Thread createNewThread(Thread newThread) throws SQLException {
+    public String createNewThread(Thread newThread) throws SQLException {
         String query = "INSERT INTO TBL_THREAD (THREADNAME, THREADDATE, THREADCONTENT)"
                 + " VALUES ( '"+newThread.getThreadName() + "','" + newThread.getThreadDate() +"', '" + newThread.getThreadContent() +"')";
-        String result = dbHelper.insertData(query);
-        return newThread;
+        Boolean status = dbHelper.insertData(query);
+      if (!status) {
+    		return "Berhasil ";
+    	}else{
+          return "Gagal";
+    	}
     }
 
     @Override
@@ -48,8 +50,12 @@ public class ThreadService implements IThread {
                 currThread.getThreadContent() +
                 "' WHERE ID = "+
                 id;
-        String result = dbHelper.updateDatabyId(query);
-        return result;
+        Boolean result = dbHelper.updateDatabyId(query);
+		if(!result){
+			return "Berhasil";
+		}else{
+			return "Gagal";
+		}
     }
 
     @Override
@@ -91,11 +97,15 @@ public class ThreadService implements IThread {
     @Override
     public String deleteThreadById(BigInteger id) throws SQLException {
         String sql = "DELETE FROM TBL_THREAD WHERE ID ="+ id;
-        String result = dbHelper.deleteById(sql);
-        return result;
+        Boolean result = dbHelper.deleteById(sql);
+        if(!result){
+			return "Berhasil";
+		}else{
+			return "Gagal";
+		}
     }
 
-    private deinitialize() {
+    private void deinitialize() {
         thread.setId(null);
         thread.setThreadName(null);
         thread.setThreadDate(null);

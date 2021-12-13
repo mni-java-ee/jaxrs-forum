@@ -3,20 +3,12 @@ package mni.code.connection;
 import oracle.jdbc.OracleDriver;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import mni.code.model.Thread;
 
 @ApplicationScoped
 public class DbHelper {
-	
-	private List<Thread> threadList = new ArrayList<Thread>();
 
 	private static Connection koneksi;
 
@@ -51,14 +43,9 @@ public class DbHelper {
         return result;
     }
     
-    public String insertData(String sql) throws SQLException {
-    	String result = "Gagal";
+    public Boolean insertData(String sql) throws SQLException {
     	PreparedStatement preparedStmt = koneksi.prepareStatement(sql);
-    	Boolean status = preparedStmt.execute();
-    	if (!status) {
-    		result = "Berhasil ";
-    	}
-    	return result;
+    	return preparedStmt.execute();
     }
     
     public ResultSet getAllData(String sql) throws SQLException {
@@ -75,24 +62,14 @@ public class DbHelper {
     	return rs;
     }
 
-	public String updateDatabyId(String sql) throws SQLException {
+	public Boolean updateDatabyId(String sql) throws SQLException {
 		Statement stmt = koneksi.createStatement();
-		Boolean result = stmt.execute(sql);
-		if(!result){
-			return "Berhasil";
-		}else{
-			return "Gagal";
-		}
+		return stmt.execute(sql);
 	}
 
-	public String deleteById(String sql) throws SQLException{
+	public Boolean deleteById(String sql) throws SQLException{
 		Statement stmt = koneksi.createStatement();
-		Boolean result = stmt.execute(sql);
-		if(!result){
-			return "Berhasil";
-		}else{
-			return "Gagal";
-		}
+		return stmt.execute(sql);
 	}
 
 	public ResultSet executeSQL(String sql) throws SQLException{

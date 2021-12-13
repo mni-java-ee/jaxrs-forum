@@ -51,8 +51,8 @@ public class ThreadController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createNewThread(Thread newThread) throws SQLException {
-        Thread thread = threadService.createNewThread(newThread);
-        return Response.status(200).entity(thread).build();
+        String result = threadService.createNewThread(newThread);
+        return Response.status(200).entity(result).build();
     }
 
     @PUT
