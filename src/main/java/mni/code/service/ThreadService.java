@@ -71,23 +71,21 @@ public class ThreadService implements IThread {
 
     @Override
     public Thread fetchThreadById(BigInteger id) throws SQLException {
-        thread.setId(null);
-        thread.setThreadName(null);
-        thread.setThreadDate(null);
-        thread.setThreadContent(null);
+        deinitialize();
         String sql = "SELECT ID, THREADNAME, THREADDATE, THREADCONTENT FROM TBL_THREAD WHERE ID = " + id;
         ResultSet rs = dbHelper.getSingleData(sql);
+
         if(rs != null){
-            while (rs.next()) {
+            if (rs.next()) {
                 thread.setId( BigInteger.valueOf(rs.getInt("ID")));
                 thread.setThreadName(rs.getString("THREADNAME"));
                 thread.setThreadDate(rs.getString("THREADDATE"));
                 thread.setThreadContent(rs.getString("THREADCONTENT"));
             }
             return thread;
-        }else{
-            return null;
         }
+        
+        return null;
     }
 
     @Override
@@ -95,5 +93,12 @@ public class ThreadService implements IThread {
         String sql = "DELETE FROM TBL_THREAD WHERE ID ="+ id;
         String result = dbHelper.deleteById(sql);
         return result;
+    }
+
+    private deinitialize() {
+        thread.setId(null);
+        thread.setThreadName(null);
+        thread.setThreadDate(null);
+        thread.setThreadContent(null);
     }
 }
