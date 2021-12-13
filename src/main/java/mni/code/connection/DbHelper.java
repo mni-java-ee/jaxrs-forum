@@ -15,11 +15,9 @@ public class DbHelper {
 	@PostConstruct
 	private void init(){
     	try {
-			if(koneksi == null){
 				String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 				DriverManager.registerDriver(new OracleDriver());
 				koneksi = DriverManager.getConnection(url, "tikto", "tikto1234");
-			}
     	} catch(Exception e) {
     		//System.out.println(e.getStackTrace()[0]);
     		e.printStackTrace();
