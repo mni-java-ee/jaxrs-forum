@@ -27,7 +27,7 @@ public class CommentService implements IComment {
                 "'"+comment.getComments()+"'," +
                 "'"+comment.getCommentDate()+"',"+comment.getThreadId()+");\n" +
                 "END;";
-        return dbHelper.insertQueryGetID(sql);
+        return dbHelper.execFunction(sql);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class CommentService implements IComment {
                 "        flag := comment_pkg.fn_update_comment("+id+",'"+currComment.getComments()+
                 "',     '"+currComment.getCommentDate()+"');\n" +
                 "    END;";
-        return dbHelper.insertQueryGetID(sql);
+        return dbHelper.execFunction(sql);
     }
 
 
@@ -88,6 +88,6 @@ public class CommentService implements IComment {
                 "    BEGIN\n" +
                 "        flag := comment_pkg.fn_delete_comment("+id+");\n" +
                 "    END;";
-        return dbHelper.insertQueryGetID(sql);
+        return dbHelper.execFunction(sql);
     }
 }

@@ -25,7 +25,7 @@ public class DbHelper {
         }
     }
 
-    public  int insertQueryGetID(String query){
+    public int execFunction(String query){
         int num = 0;
 
         try {
