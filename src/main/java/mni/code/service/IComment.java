@@ -16,8 +16,8 @@ public interface IComment {
     //Fetch All
     List<Comment> fetchAllComment();
     //Update
-    boolean updateCurrentComment(BigInteger id , Comment currComment);
+    int updateCurrentComment(BigInteger id , Comment currComment);
     //Delete
-    boolean deleteComment(BigInteger id);
+    int deleteComment(BigInteger id);
 
 }

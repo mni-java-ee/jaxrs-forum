@@ -28,4 +28,3 @@ PROCEDURE delete_comment(
     fn_id_comment tbl_comment.ID_COMMENT%type
 );
  END comment_pckg;
-/

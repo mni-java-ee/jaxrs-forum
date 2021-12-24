@@ -11,8 +11,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.math.BigInteger;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("/comment-mgmt")
@@ -83,6 +81,5 @@ public class CommentController {
         commentService.deleteComment(id);
         return Response.status(HttpStatus.SC_OK).build();
     }
-
 
 }

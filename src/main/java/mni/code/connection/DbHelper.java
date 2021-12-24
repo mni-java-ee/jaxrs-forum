@@ -1,9 +1,11 @@
 package mni.code.connection;
 
 import oracle.jdbc.OracleDriver;
+import oracle.jdbc.OracleTypes;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import java.math.BigInteger;
 import java.sql.*;
 
 @ApplicationScoped
@@ -28,6 +30,7 @@ public class DbHelper {
 
         try {
             Statement statement = connection.createStatement();
+            statement.executeUpdate("begin dbms_output.enable(); end;");
             num = statement.executeUpdate(query);
             statement.close();
         }catch (SQLException e){
@@ -40,9 +43,43 @@ public class DbHelper {
     public ResultSet SelectQuery(String query){
         ResultSet rs = null;
         try {
-            Statement statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-        }catch (SQLException e){
+            CallableStatement cs = connection.prepareCall(query);
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+            cs.execute();
+            rs = (ResultSet) cs.getObject(1);
+        }
+        catch (SQLException t)
+        {
+            System.err.format("SQL State: %s\n%s", t.getSQLState(), t.getMessage());
+            t.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return rs;
+
+
+}
+
+    public ResultSet SelectIdProcedure(String query, BigInteger id){
+        ResultSet rs = null;
+        int temp = id.intValue();
+        try {
+            CallableStatement cs = connection.prepareCall(query);
+            cs.registerOutParameter(1, OracleTypes.INTEGER);
+            cs.setInt(1 , temp);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+            cs.execute();
+            rs = (ResultSet) cs.getObject(2);
+        }
+        catch (SQLException t)
+        {
+            System.err.format("SQL State: %s\n%s", t.getSQLState(), t.getMessage());
+            t.printStackTrace();
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
         return rs;
@@ -62,4 +99,19 @@ public class DbHelper {
 
         return result;
     }
+
+    public int updateFunction(String query){
+        int result = 0 ;
+
+        try {
+            CallableStatement cs = connection.prepareCall(query);
+            result = cs.executeUpdate();
+            cs.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 }
