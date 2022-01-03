@@ -2,6 +2,7 @@ package mni.code.model;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Date;
 
 public class Thread implements Serializable {
 
@@ -9,7 +10,7 @@ public class Thread implements Serializable {
 
     private String threadName;
 
-    private String threadDate;
+    private Date threadDate;
 
     private String threadContent;
 
@@ -29,11 +30,11 @@ public class Thread implements Serializable {
         this.threadName = threadName;
     }
 
-    public String getThreadDate() {
+    public Date getThreadDate() {
         return threadDate;
     }
 
-    public void setThreadDate(String threadDate) {
+    public void setThreadDate(Date threadDate) {
         this.threadDate = threadDate;
     }
 

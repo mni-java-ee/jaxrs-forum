@@ -20,14 +20,8 @@ public class CommentService implements IComment {
 
     @Override
     public int createNewComment(Comment comment) {
-        String sql = "DECLARE\n" +
-                "flag NUMBER;\n" +
-                "BEGIN\n" +
-                "flag := comment_pkg.fn_add_comment("+comment.getCommentId()+"," +
-                "'"+comment.getComments()+"'," +
-                "'"+comment.getCommentDate()+"',"+comment.getThreadId()+");\n" +
-                "END;";
-        return dbHelper.execFunction(sql);
+        String sql = "{ ? = call comment_pkg.fn_add_comment('"+comment.getComments()+"',"+comment.getThreadId()+")}";
+        return dbHelper.insertFunction(sql);
     }
 
     @Override
@@ -40,7 +34,7 @@ public class CommentService implements IComment {
                 c.setCommentId(BigInteger.valueOf(rs.getInt("ID_COMMENT")));
                 c.setThreadId(BigInteger.valueOf(rs.getInt("ID_THREAD")));
                 c.setComments(rs.getString("COMMENTS"));
-                c.setCommentDate(rs.getString("COMMENT_DATE"));
+                c.setCommentDate(rs.getDate("COMMENT_DATE"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,7 +53,7 @@ public class CommentService implements IComment {
                 c.setCommentId(BigInteger.valueOf(rs.getInt("ID_COMMENT")));
                 c.setThreadId(BigInteger.valueOf(rs.getInt("ID_THREAD")));
                 c.setComments(rs.getString("COMMENTS"));
-                c.setCommentDate(rs.getString("COMMENT_DATE"));
+                c.setCommentDate(rs.getDate("COMMENT_DATE"));
                 commentList.add(c);
             }
         } catch (SQLException e) {
@@ -71,13 +65,8 @@ public class CommentService implements IComment {
 
     @Override
     public int updateCurrentComment(BigInteger id, Comment currComment) {
-        String sql = "DECLARE\n" +
-                "    flag NUMBER;\n" +
-                "    BEGIN\n" +
-                "        flag := comment_pkg.fn_update_comment("+id+",'"+currComment.getComments()+
-                "',     '"+currComment.getCommentDate()+"');\n" +
-                "    END;";
-        return dbHelper.execFunction(sql);
+        String sql = "{ ? = call comment_pkg.fn_update_comment("+id+",'"+currComment.getComments()+"')}";
+        return dbHelper.insertFunction(sql);
     }
 
 

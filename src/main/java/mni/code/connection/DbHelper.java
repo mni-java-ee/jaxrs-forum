@@ -40,6 +40,51 @@ public class DbHelper {
         return num;
     }
 
+    public int insertFunction(String query){
+        int num = 1;
+
+        try {
+            CallableStatement cs = connection.prepareCall(query);
+            cs.registerOutParameter(1,OracleTypes.VARCHAR);
+            cs.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+            num = 0;
+        }
+        return num;
+    }
+
+    public int updateFunction(String query, BigInteger id){
+        int num = 1;
+        int temp = id.intValue();
+
+        try {
+            CallableStatement cs = connection.prepareCall(query);
+            cs.registerOutParameter(1, OracleTypes.INTEGER);
+            cs.setInt(1 , temp);
+            cs.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+            num = -1 ;
+        }
+        return num;
+    }
+
+
+    public int deleteFunction(String query, BigInteger id){
+        int num = 1;
+        int temp = id.intValue();
+
+        try {
+            CallableStatement cs = connection.prepareCall(query);
+            cs.registerOutParameter(1,OracleTypes.INTEGER);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return num;
+    }
+
+
     public ResultSet SelectQuery(String query){
         ResultSet rs = null;
         try {
@@ -58,8 +103,6 @@ public class DbHelper {
             e.printStackTrace();
         }
         return rs;
-
-
 }
 
     public ResultSet SelectIdProcedure(String query, BigInteger id){
@@ -93,20 +136,6 @@ public class DbHelper {
             Statement statement = connection.createStatement();
             result = statement.execute(query);
             statement.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-    public int updateFunction(String query){
-        int result = 0 ;
-
-        try {
-            CallableStatement cs = connection.prepareCall(query);
-            result = cs.executeUpdate();
-            cs.close();
         }catch (Exception e){
             e.printStackTrace();
         }
