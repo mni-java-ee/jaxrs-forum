@@ -1,30 +1,34 @@
---  INSERT COMMENT
-CREATE PACKAGE comment_pckg
-    AS
-    PROCEDURE add_comments(
-    fn_id_comment tbl_comment.ID_COMMENT%type,
-    fn_comments tbl_comment.COMMENTS%type,
-    fn_comment_date tbl_comment.COMMENT_DATE%type,
-    fn_id_thread tbl_comment.ID_THREAD%type
-);
+CREATE OR REPLACE PACKAGE COMMENT_PKG
+AS
+    PROCEDURE fetch_id_comment(fn_id_comment tbl_comment.ID_COMMENT%type, c_comment_id OUT SYS_REFCURSOR);
 
--- SELECT ALL COMMENT
-PROCEDURE list_comment;
+    PROCEDURE pc_fetch_all(c_comment_all OUT SYS_REFCURSOR);
 
--- SELECT COMMENT BY ID
-PROCEDURE fetch_id_comment(
-    fn_id_comment tbl_comment.ID_COMMENT%type
-);
+    FUNCTION fn_add_comment(p_comments varchar, p_id_thread integer)
+        RETURN number;
 
--- UPDATE COMMENT
-PROCEDURE update_comment(
-    fn_comments tbl_comment.COMMENTS%type,
-    fn_comment_date tbl_comment.COMMENT_DATE%type,
-    fn_id_comment tbl_comment.ID_COMMENT%type
-);
+    FUNCTION fn_update_comment(p_id_comment integer, p_comments tbl_comment.comments%type)
+        RETURN number;
 
--- DELETE COMMENT
-PROCEDURE delete_comment(
-    fn_id_comment tbl_comment.ID_COMMENT%type
-);
- END comment_pckg;
+    FUNCTION fn_delete_comment(p_id_comment integer)
+        RETURN number;
+END COMMENT_PKG;
+/
+
+SELECT * FROM TBL_THREAD;
+
+DECLARE
+    flag NUMBER;
+BEGIN
+    flag := comment_pkg.fn_update_comment(1,'Update pake function nih gan 2','12-12-2012');
+END;
+/
+
+DECLARE
+
+    flag number;
+
+BEGIN
+    flag := fn_add_comment(10,'test','12-12-2012',1);
+END;
+/

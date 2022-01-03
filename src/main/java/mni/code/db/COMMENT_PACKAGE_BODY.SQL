@@ -1,73 +1,68 @@
-CREATE PACKAGE BODY COMMENT_PCKG
-    AS
--- INSERT COMMENT
-    PROCEDURE add_comments(
-        fn_id_comment TBL_COMMENT.ID_COMMENT%type,
-        fn_comments TBL_COMMENT.COMMENTS%type,
-        fn_comment_date TBL_COMMENT.COMMENT_DATE%type,
-        fn_id_thread TBL_COMMENT.ID_THREAD%type)
-    IS
-        BEGIN
-            INSERT INTO TBL_COMMENT (ID_COMMENT , COMMENTS ,COMMENT_DATE, ID_THREAD)
-                VALUES(fn_id_comment, fn_comments, fn_comment_date , fn_id_thread);
-        END add_comments;
-
-/*-- SELECT COMMENT BY ID
-        PROCEDURE fetch_id_comment(fn_id_comment TBL_COMMENT.ID_COMMENT%type) IS
-            fn_comments TBL_COMMENT.COMMENTS%type;
-            fn_comment_date TBL_COMMENT.COMMENT_DATE%type;
-            fn_id_thread TBL_THREAD.ID_THREAD%type;
+CREATE OR REPLACE PACKAGE BODY Comment_pkg
+AS
+    PROCEDURE fetch_id_comment(
+        fn_id_comment tbl_comment.ID_COMMENT%type,
+        c_comment_id OUT SYS_REFCURSOR
+    )
+        IS
+        fn_comments tbl_comment.comments%TYPE;
+        fn_comment_date tbl_comment.comment_date%TYPE;
+        fn_id_thread tbl_comment.id_comment%TYPE;
+        fn_id_tbthread tbl_thread.id_thread%TYPE;
 
     BEGIN
-        Select  c.comments , c.comment_date , c.id_comment , t.id_thread
-        into fn_comments , fn_comment_date  , fn_id_thread
-        From tbl_comment c left join tbl_thread t on c.id_thread = t.id_thread
-        where c.id_comment = fn_id_comment;
-            dbms_output.put_line('---------------Get Comment By ID--------------------');
-            dbms_output.put_line('Id_Comment              : ' ||fn_id_comment);
-            dbms_output.put_line('Comment              : ' ||fn_comments);
-            dbms_output.put_line('Comment Date              : ' ||fn_comment_date);
-            dbms_output.put_line('Id_Thread              : ' ||fn_id_thread);
-
-            end fetch_id_comment;
+        OPEN c_comment_id FOR
+            SELECT id_comment, comments, comment_date, id_thread
+            FROM tbl_comment
+            WHERE id_comment = fn_id_comment;
+    END fetch_id_comment;
 
 
--- SELECT ALL COMMENT
-PROCEDURE list_comment IS
-    fn_id_comment tbl_comment.ID_COMMENT%type;
-    fn_comments tbl_comment.COMMENTS%type;
-    fn_comment_date tbl_comment.COMMENT_DATE%type;
-    fn_id_thread TBL_THREAD.ID_THREAD%type;
-    fn_thread_content TBL_THREAD.THREAD_CONTENT%type;
-    fn_thread_name TBL_THREAD.THREAD_NAME%type;
-    CURSOR c_comment is
-        select DISTINCT t.id_thread , t.thread_content , t.thread_name ,  c.id_comment   , c.comments , c.comment_date
-        from tbl_thread t left join tbl_comment c on t.id_thread = c.id_thread where c.id_comment is not null order by t.id_thread , c.id_comment  ASC;
+    PROCEDURE pc_fetch_all(c_comment_all OUT SYS_REFCURSOR) AS
+    BEGIN
+        OPEN c_comment_all FOR
+            SELECT  id_comment, comments, comment_date, id_thread FROM tbl_comment ORDER BY id_comment ASC;
+    END pc_fetch_all;
+
+    FUNCTION fn_add_comment(p_comments varchar, p_id_thread integer)
+        RETURN number IS
+        type flag is table of number;
+        bulkId flag;
+    BEGIN
+        INSERT INTO tbl_comment (ID_COMMENT , COMMENTS , COMMENT_DATE, ID_THREAD) VALUES(ID_CMNT.nextval, p_comments, SYSDATE, p_id_thread) returning id_comment bulk collect into bulkId;
+        COMMIT;
+        RETURN bulkId.count;
+    END;
+
+    FUNCTION fn_update_comment(p_id_comment integer, p_comments tbl_comment.comments%type)
+        RETURN NUMBER IS flag number;
+    BEGIN
+        UPDATE tbl_comment
+        SET comments = p_comments, comment_date = SYSDATE
+        WHERE id_comment = p_id_comment;
+        RETURN (flag);
+    END;
+
+    FUNCTION fn_delete_comment(p_id_comment integer)
+        RETURN NUMBER IS flag number;
+    BEGIN
+        DELETE FROM tbl_comment
+        WHERE id_comment = p_id_comment;
+
+        RETURN (flag);
+    END;
+END Comment_pkg;
+/
+
+
+
+CREATE OR REPLACE FUNCTION fn_add_comment(p_id_comment integer, p_comments varchar, p_comment_date varchar, p_id_thread integer)
+    RETURN number IS
+    type flag is table of number;
+    bulkId flag;
 BEGIN
-    open c_comment; --cursor for allocating the memory
-    loop
-        FETCH c_comment into fn_id_comment, fn_comments, fn_comment_date, fn_id_thread , fn_thread_content, fn_thread_name ; --cursor for retrieving the data
-        EXIT WHEN c_comment%notfound;
-        dbms_output.put_line(fn_id_thread || ' ' || fn_thread_content || ' ' || fn_thread_name || ' ' || fn_id_comment || ' ' || fn_comments || ' ' || fn_comment_date);
-    END LOOP;
-    CLOSE c_comment; --cursor to release the allocated memory
-END list_comment;
-
--- UPDATE COMMENT
-    PROCEDURE update_comment(
-        fn_id_comment TBL_COMMENT.ID_COMMENT%type,
-        fn_comments TBL_COMMENT.COMMENTS%type,
-        fn_comment_date TBL_COMMENT.COMMENT_DATE%type
-    ) is
-    begin
-        UPDATE TBL_COMMENT SET COMMENTS = fn_comments, COMMENT_DATE = fn_comment_date
-        WHERE ID_COMMENT = fn_id_comment;
-    end update_comment;
-
--- DELETE COMMENT
-    PROCEDURE delete_comment(fn_id_comment TBL_COMMENT.ID_COMMENT%type) is
-    begin
-        Delete from TBL_COMMENT where ID_COMMENT = fn_id_comment;
-    end delete_comment;*/
-
-    END COMMENT_PCKG;
+    INSERT INTO tbl_comment (ID_COMMENT , COMMENTS , COMMENT_DATE, ID_THREAD) VALUES(p_id_comment, p_comments, p_comment_date, p_id_thread) returning id_comment bulk collect into bulkId;
+    COMMIT;
+    RETURN bulkId.count;
+END;
+/
